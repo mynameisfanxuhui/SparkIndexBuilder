@@ -34,7 +34,7 @@ object IndexBuilder {
     var comparedField = 0
     var conditionVal = "18"
 
-
+    println("this is the first result")
     //query without index
     var resultRDD = originalRDD.filter(x => x(0)==conditionVal)
     resultRDD.foreach(println)
@@ -44,12 +44,21 @@ object IndexBuilder {
     //query with index
 
     //first get index
-    var index = newRDDIndexWithID.collect(
-      x=>if(x._2==conditionVal) x._1
-    )
-    index.foreach(println)
+    var index = newRDDIndexWithID.filter(x=>x._2==conditionVal).map(x=>x._1)
+    var collectIndexRes = index.collect()
 
+    //query with index
+    var resultRDDWithIndex = originalRDD.mapPartitionsWithIndex((index, iterator)=>{
+      if (collectIndexRes.contains(index)) {
+      iterator.filter(x=>{x.get(0) == conditionVal})
+      }else
+        {
+          iterator.filter(x=>{false})
+        }
 
+    })
+    println("this is the second result")
+    resultRDDWithIndex.foreach(println)
 
     sc.stop()
   }
