@@ -35,19 +35,28 @@ object IndexBuilder {
     var conditionVal = "18"
 
     println("this is the first result")
+
     //query without index
+    val t1 = System.nanoTime
+
     var resultRDD = originalRDD.filter(x => x(0)==conditionVal)
     resultRDD.foreach(println)
+
+    val duration1 = (System.nanoTime - t1) / 1e9d
+    println("this is the runtime without index")
+    println(duration1)
 
     var test = (1,2)
 
     //query with index
-
+    val t2 = System.nanoTime
     //first get index
     var index = newRDDIndexWithID.filter(x=>x._2==conditionVal).map(x=>x._1)
     var collectIndexRes = index.collect()
 
     //query with index
+
+
     var resultRDDWithIndex = originalRDD.mapPartitionsWithIndex((index, iterator)=>{
       if (collectIndexRes.contains(index)) {
       iterator.filter(x=>{x.get(0) == conditionVal})
@@ -59,7 +68,10 @@ object IndexBuilder {
     })
     println("this is the second result")
     resultRDDWithIndex.foreach(println)
-
+    val duration2 = (System.nanoTime - t2) / 1e9d
+    println("this is the runtime with index")
+    println(duration2)
     sc.stop()
   }
 }
+

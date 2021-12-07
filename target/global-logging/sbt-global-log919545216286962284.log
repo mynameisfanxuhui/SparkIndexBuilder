@@ -1,0 +1,6 @@
+[debug] > Exec(__stopWatch console0;sbtPromptChannel console0, Some(d6e2e543-2f53-43f4-a362-c71834642a6e), Some(CommandSource(console0)))
+[debug] > Exec(__stopWatch console0, None, Some(CommandSource(console0)))
+[debug] > Exec(sbtPromptChannel console0, None, Some(CommandSource(console0)))
+[debug] > Exec(resumeFromFailure, None, None)
+[debug] > Exec(__waitWatch console0, None, None)
+[debug] > Exec(idea-shell, None, None)
